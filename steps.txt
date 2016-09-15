@@ -1,0 +1,25 @@
+
+1. bundle
+   a) fix syntax
+   b) look into app.js: path is now dist, not app -> System.import('app') will not find anything in the bundle. one way to deal with that is need to fix config:
+
+2. tsc from the command line, pipe resulting js to dist (side effect of having configs/systemjs.config.js in the dist - we will make use of it later)
+   (gulp dist)
+
+3. index-production.html + gulp production
+   a).config is now in the bundle
+   b) you still need import('app') because you used build, not buildStatic - build(), unlike buildStatic(),  produces bundles that only make modules available for later use, they do not import anything on their own
+   c) you need to load scripts after <my-app> tag (or on document ready) because otherwise they will be executed at the time when <my-app> element does not exist yet
+   d).hack: System.production = true
+
+
+ALTERNATIVE:
+
+./node_modules/.bin/tsc --outdir dist
+
+copy systemjs.config.js
+
+path node_modules to ../node_modules for env == build
+
+gulp process.chdir('dist')
+
