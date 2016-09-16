@@ -22,13 +22,14 @@ gulp.task('tsc', function () {
 
 });
 
-gulp.task('bundle-config', function() {
+gulp.task('dist-config', function() {
   return gulp.src('app/configs/systemjs.config.js')
     .pipe(gulp.dest('dist/configs'));
 });
 
+gulp.task('dist', ['dist-config', 'tsc'], function() {});
 
-gulp.task('bundle-app', ['bundle-config', 'tsc'], function() {
+gulp.task('bundle-app', ['dist'], function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
   return builder
@@ -46,7 +47,7 @@ gulp.task('bundle-app', ['bundle-config', 'tsc'], function() {
 
 });
 
-gulp.task('bundle-dependencies', ['bundle-config', 'tsc'], function() {
+gulp.task('bundle-dependencies', ['dist'], function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
   return builder
