@@ -24,7 +24,6 @@
     <my-app>Loading...</my-app>
 
     <script>
-      System.production = true;
       System.import('dist/configs/systemjs.config.js').then(function() {
         System.import('app').catch(function(err){ console.error(err); });
       });
