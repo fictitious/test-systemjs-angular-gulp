@@ -6,7 +6,7 @@ var systemjsBuilder = require('systemjs-builder');
 
 gulp.task('tsc', function () {
 
-  return gulp.src(['app/**' + '/*.ts', 'typings/index.d.ts'])
+  return gulp.src(['app/**/*.ts', 'typings/index.d.ts'])
     .pipe(tsc({
       "target": "es5",
       "module": "commonjs",
