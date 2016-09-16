@@ -1,17 +1,38 @@
 var gulp = require('gulp');
-var tsc = require('gulp-tsc');
+var typescript = require('typescript');
+var tsc = require('gulp-typescript');
 
 var systemjsBuilder = require('systemjs-builder');
 
-gulp.task('bundle-app', function() {
+gulp.task('tsc', function () {
+
+  return gulp.src(['app/**' + '/*.ts', 'typings/index.d.ts'])
+    .pipe(tsc({
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "removeComments": true,
+      "noImplicitAny": false,
+      "suppressImplicitAnyIndexErrors": true
+    }))
+    .js.pipe(gulp.dest('dist'));
+
+});
+
+gulp.task('bundle-config', function() {
+  return gulp.src('app/configs/systemjs.config.js')
+    .pipe(gulp.dest('dist/configs'));
+});
 
 
+gulp.task('bundle-app', ['bundle-config', 'tsc'], function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
-
-  process.chdir('dist');
   return builder
-      .bundle('[app/**/*]', '../production/app.bundle.min.js', {
+      .bundle('[dist/**/*]', 'production/app.bundle.min.js', {
           minify: true,
           mangle: true
       })
@@ -25,13 +46,11 @@ gulp.task('bundle-app', function() {
 
 });
 
-gulp.task('bundle-dependencies', function() {
+gulp.task('bundle-dependencies', ['bundle-config', 'tsc'], function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
-
-  process.chdir('dist');
   return builder
-      .bundle('app/**/* - [app/**/*.js]', '../production/dependencies.bundle.min.js', {
+      .bundle('dist/**/* - [dist/**/*.js]', 'production/dependencies.bundle.min.js', {
           minify: true,
           mangle: true
       })

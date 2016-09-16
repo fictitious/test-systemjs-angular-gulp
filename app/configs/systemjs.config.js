@@ -6,14 +6,14 @@ System.config({
     defaultJSExtensions: true,
 
     paths: {
-        'npm:': 'node_modules/'
+       'npm:': 'node_modules/'
     },
 
     // Let the system loader know where to look for things
     map: {
 
-        // Our app is within the app folder, unless in production
-        app: System.production ? 'dist' : 'app',
+        // Our app is compiled to js files in the dist folder
+        app: 'dist',
 
         // Angular bundles
         '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
