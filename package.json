@@ -39,6 +39,7 @@
     "concurrently": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-typescript": "^2.13.6",
+    "gulp-sourcemaps": "^2.2.0",
     "http-server": "^0.9.0",
     "lite-server": "^2.2.0",
     "lodash": "^4.11.1",
