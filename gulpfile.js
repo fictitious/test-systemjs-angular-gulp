@@ -7,10 +7,11 @@ var systemjsBuilder = require('systemjs-builder');
 
 gulp.task('tsc', function () {
 
-  return gulp.src(['app/**/*.ts', 'typings/index.d.ts'], { base: 'app' })
+  return gulp.src(['app/**/*.ts'], { base: 'app' })
     .pipe(sourcemaps.init())
     .pipe(tsc({
       "target": "es5",
+      "lib": ["es6", "dom"],
       "module": "commonjs",
       "moduleResolution": "node",
       "sourceMap": true,
@@ -30,9 +31,9 @@ gulp.task('dist-config', function() {
     .pipe(gulp.dest('dist/configs'));
 });
 
-gulp.task('dist', ['dist-config', 'tsc'], function() {});
+gulp.task('dist', gulp.series('dist-config', 'tsc'));
 
-gulp.task('bundle-app', ['dist'], function() {
+gulp.task('bundle-app', gulp.series('dist', function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
   return builder
@@ -49,9 +50,9 @@ gulp.task('bundle-app', ['dist'], function() {
           console.log(err);
       });
 
-});
+}));
 
-gulp.task('bundle-dependencies', ['dist'], function() {
+gulp.task('bundle-dependencies', gulp.series('dist', function() {
 
   var builder = new systemjsBuilder('', 'app/configs/systemjs.config.js');
   return builder
@@ -69,6 +70,6 @@ gulp.task('bundle-dependencies', ['dist'], function() {
           console.log(err);
       });
 
-  });
+}));
 
-gulp.task('production', ['bundle-app', 'bundle-dependencies'], function(){});
+gulp.task('production', gulp.series('bundle-app', 'bundle-dependencies'));
